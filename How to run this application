@@ -1,7 +1,7 @@
 1.you can install an IDE for java(eg:MyEclipse 2017) , then directly create a package named "计算器",and put the three java files into 
 this package ,the main class is in the Calculator.java ,then open it in the IDE.
 
-2.a more easier way is to install the latest jre (http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html)
+2.a more easier way is to install the latest jre http://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html
 use windows CMD to run this
 switch the folder directory to where these three java files are
 use the commad as follows:
