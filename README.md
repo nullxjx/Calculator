@@ -30,7 +30,7 @@ if you the expression is something like this,"((2+3)" or "(2+3))" or "()+2" or "
 space.
 
 About this pragram:
-This program contains three three parts which are appeared in three .java files separately.
+This program contains three parts which are appeared in three .java files separately.
 the fist is Calculator.java which draws the main window and achieves the listeners.
 the second is EvaluateExpression.java which is the calculation of the nifix expression,it gets the expression to be calculated
 from the workspace area where you have entered the expression.
