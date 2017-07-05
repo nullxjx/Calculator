@@ -14,7 +14,7 @@ if you want to delete the character you have just entered,you can either click t
 button on your keyboard.if you want to delele all the all the characters in the workspace which is located in the upper left
 corner of the calculator,just click the "Delete" button on your keyboard.if you want to clear all the distory appeared on the
 right ,you can click the button in the bottom right corner.At last,you can click the "Enter" button or the "=" button on your 
-keyboard or the "=" button on the screen tp get the result.
+keyboard or the "=" button on the screen to get the result.
 This program will automatically prevent some illegal input
 for example:
 the first character entered can not be "." or "_" or "/" or "*" or "+" or "-" or ")"
