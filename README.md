@@ -2,13 +2,13 @@
 This is a Calculaotr program in Java
 
 Use Guide:
-This program can do some basic calculation
-The operands include  positive number and negative number as well as decimal number
+This program can do some basic calculation.
+The operands include  positive number and negative number as well as decimal number.
 When you want to enter a negative number ,you are supposed to enter the button "_" in the left-bottom of the main window
 of the calculator,it will generate a pair of brackets as well as a  minus for the number you have just entered automaticaly.
 for example:
 if you have just typed 12.3
-than click the "_" button
+then click the "_" button
 in the workspace area,it will appera (-12.3)
 if you want to delete the character you have just entered,you can either click the "<--" button or just type the "Backspace"
 button on your keyboard.if you want to delele all the all the characters in the workspace which is located in the upper left
@@ -36,4 +36,4 @@ the second is EvaluateExpression.java which is the calculation of the nifix expr
 from the workspace area where you have entered the expression.
 the third is Arith.java which can do precise calculations between two double numbers without any error.
 
-there may still exists some small bugs,if you find,contact me at thexjx@gmail.com 
+there may still exist some small bugs,if you find,contact me at thexjx@gmail.com 
