@@ -26,8 +26,24 @@ class MainWindow extends JFrame{
 	private int width,height;//父窗体的宽度和高度
 	
 	public MainWindow(){
-		super("计算器 By XJX");
+		super("Calculator By XJX");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		Image img = Toolkit.getDefaultToolkit().getImage("title.png");//窗口图标
+		setIconImage(img);
+		
+		String lookAndFeel = UIManager.getSystemLookAndFeelClassName();
+		try {
+			UIManager.setLookAndFeel(lookAndFeel);
+		} catch (ClassNotFoundException e1) {
+			e1.printStackTrace();
+		} catch (InstantiationException e1) {
+			e1.printStackTrace();
+		} catch (IllegalAccessException e1) {
+			e1.printStackTrace();
+		} catch (UnsupportedLookAndFeelException e1) {
+			e1.printStackTrace();
+		}
+		
 		addKeyListener(new KeyMonitor());//注册键盘事件监听器
 		setFocusable(true);
 		setLayout(new GridLayout(1,2,2,0));
@@ -40,47 +56,33 @@ class MainWindow extends JFrame{
 		bar.setBackground(Color.white);
 		setJMenuBar(bar);
 		JMenu fileMenu = new JMenu("File");
+		fileMenu.setFont(new Font("微软雅黑",Font.PLAIN,15));
 		bar.add(fileMenu);
 		JMenuItem helpItem = new JMenuItem("Help");
 		JMenuItem exitItem = new JMenuItem("Exit");
-		JMenuItem aboutItem = new JMenuItem("About...");
+		JMenuItem aboutItem = new JMenuItem("About");
 		fileMenu.add(exitItem);
 		fileMenu.add(aboutItem);
 		fileMenu.add(helpItem);
 		JDialog dialog2 = new JDialog();
 		dialog2.setModal(true);//设置为模态窗口
+		dialog2.setIconImage(img);
 		dialog2.setTitle("使用须知");
 		dialog2.setSize(450, 500);
-		JTextArea J8 = new JTextArea("本程序是一个计算器,可以实现windows自带的科学计算器上的大多数基本运算和复合运算\n\n"
-				+ "由于在中文输入法中键盘上除号(反斜杠)的使用有时候会出现一个未知的问题,建议调成英文输入法使用\n\n"
-				+ "关于负号的使用:负号是界面左下角的 ±,在你输入完一个数字时,点击这个按钮,会直接生成负数,注意只限于以这种方式使用,以下1/x以及根号也是如此\n\n"
-				+ "关于1/x的使用：依照负号使用规则,生成一个数的倒数\n\n"
-				+ "关于根号的使用：依照负号使用规则,生成一个数的二次根\n\n"
-				+ "C按钮是清空输入区的所有内容,对应键盘的DELETE键;<--按钮是删除输入的最后一个字符,对应键盘的BACKSPACE键\n\n"
-				+ "键盘上的等号和回车都相当于程序界面的 =号\n\n"
-				+ "程序阻断了输入阶段的绝大多数非法输入,所以当你非法输入时,会没有响应\n\n"
-				+ "本程序的主要操作逻辑仿照win10自带的计算器实现\n\n"
-				+ "             Copyright @2017XJX");
-		J8.setFont(new Font("宋体",Font.BOLD,15));
+		JTextArea J8 = new JTextArea("* 本程序是一个计算器,可以实现windows自带的科学计算器上的大多数基本运算和复合运算\n\n"
+				+ "* 由于在中文输入法中键盘上除号(反斜杠)的使用有时候会出现一个未知的问题,建议调成英文输入法使用\n\n"
+				+ "* 关于负号的使用:负号是界面左下角的 ±,在你输入完一个数字时,点击这个按钮,会直接生成负数,注意只限于以这种方式使用,以下1/x以及根号也是如此\n\n"
+				+ "* 关于1/x的使用：依照负号使用规则,生成一个数的倒数\n\n"
+				+ "* 关于根号的使用：依照负号使用规则,生成一个数的二次根\n\n"
+				+ "* C按钮是清空输入区的所有内容,对应键盘的DELETE键;<--按钮是删除输入的最后一个字符,对应键盘的BACKSPACE键\n\n"
+				+ "* 键盘上的等号和回车都相当于程序界面的 =号\n\n"
+				+ "* 程序阻断了输入阶段的绝大多数非法输入,所以当你非法输入时,会没有响应\n\n"
+				+ "* 本程序的主要操作逻辑仿照win10自带的计算器实现\n\n"
+				+ "                                 Copyright @2017XJX");
+		J8.setFont(new Font("微软雅黑",Font.PLAIN,13));
 		J8.setEditable(false);
 		J8.setLineWrap(true);//自动换行
 		dialog2.add(J8);
-		JDialog dialog3 = new JDialog();
-		dialog3.setModal(true);//设置为模态窗口
-		dialog3.setTitle("关于作者");
-		dialog3.setSize(450, 300);
-		JTextArea J9 = new JTextArea("学院：江南大学物联网工程学院\n"
-								   + "班级：计科1503\n"
-								   + "姓名：谢佳鑫\n"
-								   + "学号：1030415323\n"
-								   + "指导老师：刘建军\n"
-								   + "完成日期：2017 05 20\n"
-								   + "我的邮箱：thexjx@outlook.com\n\n\n          "
-								   + "Copyright @2017XJX");
-		J9.setFont(new Font("宋体",Font.BOLD,20));
-		J9.setEditable(false);
-		J9.setLineWrap(true);//自动换行
-		dialog3.add(J9);
 	
 		helpItem.addActionListener(
 				new ActionListener(){
@@ -95,19 +97,15 @@ class MainWindow extends JFrame{
 				}
 			}
 		);
+		
 		aboutItem.addActionListener(
 				new ActionListener(){
 				public void actionPerformed(ActionEvent e){
-					point = MainWindow.this.getLocation();//获得主窗体在屏幕的坐标
-					width = MainWindow.this.getWidth();
-					height = MainWindow.this.getHeight();
-					dialog3.setLocation(
-					        point.x + width/2 - dialog3.getWidth()/2, 
-					        point.y + height/2 - dialog3.getHeight()/2);
-					dialog3.setVisible(true);
+					new About();
 				}
 			}
 		);
+		
 		exitItem.addActionListener(
 				new ActionListener(){
 				public void actionPerformed(ActionEvent e){
@@ -116,10 +114,11 @@ class MainWindow extends JFrame{
 				}
 			}
 		);
+		
 		workspace.setLayout(new BorderLayout());
 		J1 = new JTextArea(8,10);
 		J1.addKeyListener(new KeyMonitor());
-		J1.setFont(new Font("宋体",Font.BOLD,20));
+		J1.setFont(new Font("微软雅黑",Font.BOLD,20));
 		J1.setVisible(true);
 		J1.setEditable(false);
 		J1.setLineWrap(true);//自动换行
@@ -159,13 +158,14 @@ class MainWindow extends JFrame{
 		{
 			button[i].addActionListener(buttonMonitor);
 			button[i].addKeyListener(new KeyMonitor());
-			button[i].setFont(new Font("宋体",Font.BOLD,20));
+			button[i].setFont(new Font("微软雅黑",Font.PLAIN,20));
 			J2.add(button[i]);
 		}
 		workspace.add(J2);
 		
 		historyspace.setLayout(new BorderLayout());
 		JLabel J3 = new JLabel("历史记录");
+		J3.setFont(new Font("微软雅黑",Font.BOLD,13));
 		J3.addKeyListener(new KeyMonitor());
 		historyspace.add(J3,BorderLayout.NORTH);
 		J4 = new JTextArea();
@@ -179,6 +179,7 @@ class MainWindow extends JFrame{
 		J4Scroll.addKeyListener(new KeyMonitor());
 		historyspace.add(J4Scroll,BorderLayout.CENTER);
 		JButton J5 = new JButton("清除所有历史记录");
+		J5.setFont(new Font("微软雅黑",Font.BOLD,13));
 		J5.addKeyListener(new KeyMonitor());
 		J5.addActionListener(
 				new ActionListener(){
