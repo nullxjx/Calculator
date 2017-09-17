@@ -1,5 +1,5 @@
 # Calculator
-This is a Calculaotr program in Java
+This is a calculator program in Java
 
 Use Guide:
 This program can do some basic calculation.
