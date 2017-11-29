@@ -2,10 +2,10 @@
 This is a calculator program in Java
 
 Use Guide:
-This program can do some basic calculation.
+This program can do some basic calculations.
 The operands include  positive number and negative number as well as decimal number.
 When you want to enter a negative number ,you are supposed to enter the button "_" in the left-bottom of the main window
-of the calculator,it will generate a pair of brackets as well as a  minus for the number you have just entered automaticaly.
+,it will generate a pair of brackets as well as a  minus for the number you have just entered automaticaly.
 for example:
 if you have just typed 12.3
 then click the "_" button
@@ -19,9 +19,9 @@ This program will automatically prevent some illegal input
 for example:
 the first character entered can not be "." or "_" or "/" or "*" or "+" or "-" or ")"
 and you can not enter a "." after a series of numbers like "12.3" or after "(" or ")" etc.
-every you click "Enter" ,it will check if the last character is legal,if not ,there will be an "ERROR!" result on the history
+every time you click "Enter" ,it will check if the last character is legal,if not ,there will be an "ERROR!" result on the history
 space.
-the pragram also contains bracket match,but unfortunately , this can not be processed while you are typing,in can only check
+the program also contains bracket match,but unfortunately , this can not be processed while you are typing,in can only check
 the bracket match after you finish typing and click "Enter"
 for example:
 every time you type a "(" ,the program can not decide if it's legal,for it can be either legal or illegal , it depends on the 
@@ -36,4 +36,4 @@ the second is EvaluateExpression.java which is the calculation of the nifix expr
 from the workspace area where you have entered the expression.
 the third is Arith.java which can do precise calculations between two double numbers without any error.
 
-there may still exist some small bugs,if you find,contact me at thexjx@gmail.com 
+there may still exist some bugs,if you find,contact me at thexjx@gmail.com 
