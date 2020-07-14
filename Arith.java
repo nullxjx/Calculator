@@ -6,7 +6,7 @@ public class Arith {
     public static double add(double value1,double value2){
         BigDecimal b1 = new BigDecimal(Double.toString(value1));
         BigDecimal b2 = new BigDecimal(Double.toString(value2));
-        return b1.add(b2).doubleValue();
+        return b1.add(b1).doubleValue();
     }
     
     /**
