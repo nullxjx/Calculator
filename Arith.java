@@ -10,7 +10,7 @@ public class Arith {
     }
     
     /**
-     * 提供精确减法运算的sub方法
+     * 
      * @param value1 被减数
      * @param value2 减数
      * @return 两个参数的差
