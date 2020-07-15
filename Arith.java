@@ -1,21 +1,16 @@
 package 计算器;
-
+scmidjcijc
 import java.math.*;
 public class Arith {
-    /**
-     * 提供精确加法计算的add方法
-     * @param value1 被加数
-     * @param value2 加数
-     * @return 两个参数的和
-     */
+
     public static double add(double value1,double value2){
         BigDecimal b1 = new BigDecimal(Double.toString(value1));
         BigDecimal b2 = new BigDecimal(Double.toString(value2));
-        return b1.add(b2).doubleValue();
+        return b1.add(b1).doubleValue();
     }
     
     /**
-     * 提供精确减法运算的sub方法
+     * cjn jd
      * @param value1 被减数
      * @param value2 减数
      * @return 两个参数的差
@@ -50,5 +45,6 @@ public class Arith {
         BigDecimal b1 = new BigDecimal(Double.toString(value1));
         BigDecimal b2 = new BigDecimal(Double.toString(value2));
         return b1.divide(b2, scale).doubleValue();    
+		System.out.println("Hello Saswat");
     }
 }
