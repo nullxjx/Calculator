@@ -16,6 +16,10 @@ public class MainWindow extends JFrame {
     private final JButton[] btn_sets = new JButton[btn_nums];
     private boolean done = true;
 
+    //计算表达式的值
+    Stack<Character> operatorStack = new Stack<>();
+    Stack<Double> numberStack = new Stack<>();
+
     public MainWindow(){
         super("计算器");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -94,10 +98,14 @@ public class MainWindow extends JFrame {
 
     public static void main(String[] args){
         MainWindow wnd = new MainWindow();
-//        String exp = "((1+2x4)÷3-2)÷(1-1)";
+        String exp = "((1+2x4)÷3-2)÷(1-3)";
 //        exp = "(9x5)";
 //        ExpRes res = wnd.calculateExp(exp);
 //        System.out.println(res.tag + " " + res.msg + " " + res.res);
+
+        exp = "((-4)+3)x1";
+        ExpRes res = wnd.calculateExp(exp);
+        System.out.println(res.to_string());
     }
 
     private void addNegative(){
@@ -115,40 +123,41 @@ public class MainWindow extends JFrame {
     private boolean checkLegality(char pre_char, char this_char){
         //pre_char为前一个位置的字符，this_char为当前输入的字符
         switch (this_char) {
-            case '(' -> {
+            case '(' : {
                 return pre_char == ' ' || pre_char == '(' || pre_char == '+' || pre_char == '-' ||
                         pre_char == 'x' || pre_char == '÷';
             }
-            case ')', '+', '-', 'x', '÷' -> {
+            case ')' : {
                 return pre_char == ')' || (pre_char >= 48 && pre_char <= 57);
             }
-            case '.', '_' -> {
+            case '+' : {
+                return pre_char == ')' || (pre_char >= 48 && pre_char <= 57);
+            }
+            case '-' : {
+                return pre_char == ')' || (pre_char >= 48 && pre_char <= 57);
+            }
+            case 'x' : {
+                return pre_char == ')' || (pre_char >= 48 && pre_char <= 57);
+            }
+            case '÷' : {
+                return pre_char == ')' || (pre_char >= 48 && pre_char <= 57);
+            }
+            case '.' : {
                 return pre_char >= 48 && pre_char <= 57;
             }
-            default -> {
+            case '_' : {
+                return pre_char >= 48 && pre_char <= 57;
+            }
+            default : {
                 return pre_char == ' ' || pre_char == '.' || pre_char == '(' || pre_char == '+' || pre_char == '-' ||
                         pre_char == 'x' || pre_char == '÷' || (pre_char >= 48 && pre_char <= 57);
             }
         }
     }
 
-    private int checkPriority(char a, char b){
-        //检查运算符a和b的优先级,a为符号栈栈顶运算符，b为待插入运算符
-        int[][] priority = new int[][]{
-                /* + */{-1, -1, 1, 1},
-                /* - */{-1, -1, 1, 1},
-                /* x */{-1, -1, -1, -1},
-                /* ÷ */{-1, -1, -1, -1},
-                /* ( */{1, 1, 1, 1}};
-                    /*  +  -  x  ÷  */
-        HashMap<Character, Integer> char2idx = new HashMap<>();
-        char2idx.put('+', 0);
-        char2idx.put('-', 1);
-        char2idx.put('x', 2);
-        char2idx.put('÷', 3);
-        char2idx.put('(', 4);
-
-        return priority[char2idx.get(a)][char2idx.get(b)];
+    private boolean checkPriority(char top, char c){
+        //检查运算符top和c的优先级, top为符号栈栈顶运算符，c为待插入运算符
+        return top == '(' || (c == 'x' || c == '÷') && (top == '+' || top == '-');
     }
 
     private void getResult(){
@@ -181,111 +190,76 @@ public class MainWindow extends JFrame {
         done = true;
     }
 
+    private ExpRes calculate(){
+        char top = operatorStack.pop();
+        double num1 = 0, num2 = 0, res = 0;
+        num2 = numberStack.pop();
+
+        if(!(top == '-' && numberStack.empty())){
+            num1 = numberStack.pop();
+        }
+
+        if(top == '+') res = num1+num2;
+        else if(top == '-') res = num1-num2;
+        else if(top == 'x') res = num1*num2;
+        else if(top == '÷') {
+            if(num2 != 0){
+                res = num1/num2;
+            } else {
+                return new ExpRes("ERROR", "Divided by 0", 0);
+            }
+        }
+        else return new ExpRes("ERROR", "Unknown operator", 0);
+
+        numberStack.add(res);
+        return new ExpRes("OK", "", res);
+    }
+
     private ExpRes calculateExp(String exp){
-        //计算表达式的值
-        Stack<Character> operatorStack = new Stack<>();
-        Stack<Double> numberStack = new Stack<>();
-        int ptr = 0;
-        while(ptr != exp.length()){
-            char cur = exp.charAt(ptr++);
-            if(cur >= 48 && cur <= 57){//当前字符为数字
-                String numBuffer = "" + cur;
-                while(ptr < exp.length() && ((exp.charAt(ptr) >= 48 &&  exp.charAt(ptr) <= 57) || exp.charAt(ptr) == '.')){
-                    numBuffer += exp.charAt(ptr++);
-                }
-                double value = Double.parseDouble(numBuffer);
-                numberStack.add(value);
-            }else if(cur == '('){
-                if(ptr < exp.length() && exp.charAt(ptr) == '-'){//左括号右边紧接-号，证明这是一个负数
-                    String numBuffer = "-";
-                    while(ptr < exp.length() && exp.charAt(ptr) != ')'){
-                        numBuffer += exp.charAt(ptr++);
+        operatorStack.clear();
+        numberStack.clear();
+
+        for(int i = 0; i < exp.length(); i++){
+            char cur = exp.charAt(i);
+            if(cur == '('){
+                operatorStack.add(cur);
+            }else if(cur == ')'){
+                while(!operatorStack.empty() && operatorStack.peek() != '(') {
+                    ExpRes res = calculate();
+                    if(res.tag == "ERROR"){
+                        return res;
                     }
-                    double value = Double.parseDouble(numBuffer);
-                    numberStack.add(value);
-                    ptr++;
-                }else{
+                }
+                operatorStack.pop();//弹出左括号
+            }else if(cur == '+' || cur == '-' || cur == 'x' || cur == '÷'){
+                if(operatorStack.empty() || operatorStack.peek() == '(') operatorStack.add(cur);
+                else{
+                    while(!operatorStack.empty() && !checkPriority(operatorStack.peek(), cur)) {
+                        ExpRes res = calculate();
+                        if(res.tag == "ERROR"){
+                            return res;
+                        }
+                    }
                     operatorStack.add(cur);
                 }
-            }else if(cur == ')'){
-                char top = 0;
-                //操作符栈非空
-                if(!operatorStack.empty()) top = operatorStack.peek();
-                while(top != '('){
-                    double num1 = numberStack.pop();
-                    double num2 = numberStack.pop();
-                    double res = 0;
-                    char operator = operatorStack.pop();
-                    switch (operator) {
-                        case '+' -> res = num2 + num1;
-                        case '-' -> res = num2 - num1;
-                        case 'x' -> res = num2 * num1;
-                        case '÷' -> {
-                            if (num1 != 0) {
-                                res = num2 / num1;
-                            } else {
-                                return new ExpRes("ERROR", "Divided by 0", 0);
-                            }
-                        }
-                    }
-                    numberStack.add(res);
-                    if(!operatorStack.empty()) top = operatorStack.peek();
-                    if(top == '(') top = operatorStack.pop();
-                }
-            }else if(cur == '+' || cur == '-' || cur == 'x' || cur == '÷'){
-                if(operatorStack.empty()) operatorStack.add(cur);
-                else {
-                    char top = operatorStack.peek();
-                    if(checkPriority(top, cur) == -1){
-                        double num1 = numberStack.pop();
-                        double num2 = numberStack.pop();
-                        double res = 0;
-                        char operator = operatorStack.pop();
-                        switch (operator) {
-                            case '+' -> res = num2 + num1;
-                            case '-' -> res = num2 - num1;
-                            case 'x' -> res = num2 * num1;
-                            case '÷' -> {
-                                if (num1 != 0) {
-                                    res = num2 / num1;
-                                } else {
-                                    return new ExpRes("ERROR", "Divided by 0", 0);
-                                }
-                            }
-                        }
-                        operatorStack.add(cur);
-                        numberStack.add(res);
-                    }else{
-                        operatorStack.add(cur);
-                    }
-                }
+            }else if(cur >= '0' && cur <= '9'){
+                //提取完整的数字
+                int j = i;
+                while(j + 1 < exp.length() && ( (exp.charAt(j+1) >= '0' && exp.charAt(j+1) <= '9') || exp.charAt(j+1) == '.') ) j++;
+                String num = exp.substring(i, j+1);
+                numberStack.add(Double.parseDouble(num));
+                i = j;
             }
+            else continue;
         }
 
-        if(!operatorStack.empty()){
-            while (!operatorStack.empty()){
-                double num1 = numberStack.pop();
-                double num2 = numberStack.pop();
-                double res = 0;
-                char operator = operatorStack.pop();
-                switch (operator) {
-                    case '+' -> res = num2 + num1;
-                    case '-' -> res = num2 - num1;
-                    case 'x' -> res = num2 * num1;
-                    case '÷' -> {
-                        if (num1 != 0) {
-                            res = num2 / num1;
-                        } else {
-                            return new ExpRes("ERROR", "Divided by 0", 0);
-                        }
-                    }
-                }
-                numberStack.add(res);
+        while(!operatorStack.empty()) {
+            ExpRes res = calculate();
+            if(res.tag == "ERROR"){
+                return res;
             }
         }
-
-        double exp_res = numberStack.pop();
-        return new ExpRes("OK", "", exp_res);
+        return new ExpRes("OK", "", numberStack.pop());
     }
 
     class ButtonMonitor implements ActionListener{
@@ -332,6 +306,10 @@ public class MainWindow extends JFrame {
             this.tag = tag;
             this.msg = msg;
             this.res = res;
+        }
+
+        String to_string(){
+            return this.tag + " " + this.msg + " " + this.res;
         }
     }
 }
