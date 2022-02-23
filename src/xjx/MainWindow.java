@@ -104,6 +104,7 @@ public class MainWindow extends JFrame {
 //        System.out.println(res.tag + " " + res.msg + " " + res.res);
 
         exp = "((-4)+3)x1";
+        exp = "79-98x(-2)+(7x6÷5)-(-8)+0";
         ExpRes res = wnd.calculateExp(exp);
         System.out.println(res.to_string());
     }
@@ -231,16 +232,25 @@ public class MainWindow extends JFrame {
                     }
                 }
                 operatorStack.pop();//弹出左括号
-            }else if(cur == '+' || cur == '-' || cur == 'x' || cur == '÷'){
-                if(operatorStack.empty() || operatorStack.peek() == '(') operatorStack.add(cur);
-                else{
-                    while(!operatorStack.empty() && !checkPriority(operatorStack.peek(), cur)) {
-                        ExpRes res = calculate();
-                        if(res.tag == "ERROR"){
-                            return res;
+            }else if(cur == '+'|| cur == '-' || cur == 'x' || cur == '÷'){
+                if(cur == '-' && exp.charAt(i-1) == '('){//负号
+                    operatorStack.pop();
+                    int j = i+1;
+                    while(j + 1 < exp.length() && ( (exp.charAt(j+1) >= '0' && exp.charAt(j+1) <= '9') || exp.charAt(j+1) == '.') ) j++;
+                    String num = exp.substring(i+1, j+1);
+                    numberStack.add(0-Double.parseDouble(num));
+                    i = j+1;
+                }else{
+                    if(operatorStack.empty() || operatorStack.peek() == '(') operatorStack.add(cur);
+                    else{
+                        while(!operatorStack.empty() && !checkPriority(operatorStack.peek(), cur)) {
+                            ExpRes res = calculate();
+                            if(res.tag == "ERROR"){
+                                return res;
+                            }
                         }
+                        operatorStack.add(cur);
                     }
-                    operatorStack.add(cur);
                 }
             }else if(cur >= '0' && cur <= '9'){
                 //提取完整的数字
